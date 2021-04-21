@@ -22,6 +22,7 @@ app.use(express.json());
 //* Todos los archivos que van a exportar desde './routes/auth', lo vamos a utilizar en el '/api/auth'
 // TODO: auth // crear, login, renew
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/events', require('./routes/events'));
 // TODO: CRUD: Eventos
 
 // Escuchar peticiones
