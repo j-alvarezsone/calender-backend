@@ -1,6 +1,7 @@
 const { response } = require('express'); // recuperar el intellisense
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const { generateJWT } = require('../helpers/jwt');
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
 
@@ -23,11 +24,13 @@ const createUser = async (req, res = response) => {
     await user.save();
 
     // Generar JWT
+    const token = await generateJWT(user.id, user.name);
 
     res.status(201).json({
       ok: true,
       id: user.id,
       name: user.name,
+      token,
     });
   } catch (err) {
     res.status(500).json({
@@ -60,11 +63,14 @@ const userLogin = async (req, res = response) => {
       });
     }
 
-    // Generar nuestro JWT
+    // Generar JWT
+    const token = await generateJWT(user.id, user.name);
+
     res.json({
       ok: true,
       uid: user.id,
       name: user.name,
+      token,
     });
   } catch (err) {
     res.status(500).json({
