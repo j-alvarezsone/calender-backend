@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
 const { dbConnection } = require('./database/config');
+const path = require('path');
 
 // Crear el servidor de express
 const app = express();
@@ -19,11 +20,12 @@ app.use(express.static('public'));
 app.use(express.json());
 
 // Rutas
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + 'public/index.html'));
+});
 //* Todos los archivos que van a exportar desde './routes/auth', lo vamos a utilizar en el '/api/auth'
-// TODO: auth // crear, login, renew
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/events', require('./routes/events'));
-// TODO: CRUD: Eventos
 
 // Escuchar peticiones
 app.listen(process.env.PORT, () => {
